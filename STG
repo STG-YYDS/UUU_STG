@@ -1,221 +1,114 @@
 local originalLoadstring = loadstring
 local CoreGui = game:GetService("StarterGui")
 local originalHttpGet = game.HttpGet
-
 local originalG = _G
 
 local function isHooked()
-
     if loadstring ~= originalLoadstring then
-
         return true
-
     end
-
     if game.HttpGet ~= originalHttpGet then
-
         return true
-
     end
-
     if _G ~= originalG then
-
         return true
-
     end
-
     return false
-
 end
 
 local function obfuscateUrl(url)
-
-    
-
     local key = "xai_secret_key"
-
     local result = ""
-
     for i = 1, #url do
-
         local char = string.byte(url, i)
-
         local keyChar = string.byte(key, (i % #key) + 1)
-
         result = result .. string.char(bit32.bxor(char, keyChar))
-
     end
-
     return result
-
 end
 
 local function deobfuscateUrl(obfuscated)
-
     local key = "xai_secret_key"
-
     local result = ""
-
     for i = 1, #obfuscated do
-
         local char = string.byte(obfuscated, i)
-
         local keyChar = string.byte(key, (i % #key) + 1)
-
         result = result .. string.char(bit32.bxor(char, keyChar))
-
     end
-
     return result
-
-end
-
-local function validateContent(content)
-
-    local expectedChecksum = 123456 
-
-    local checksum = 0
-
-    for i = 1, #content do
-
-        checksum = checksum + string.byte(content, i)
-
-    end
-
-    return checksum % 1000000 == expectedChecksum
-
 end
 
 local function isBeingDebugged()
-
     local startTime = tick()
-
     for i = 1, 100000 do
-
         local _ = i * i
-
     end
-
     local elapsed = tick() - startTime
-
     return elapsed > 0.1 
-
 end
 
 local a = tostring(game.Players.LocalPlayer.Character)
 
 if isHooked() or isBeingDebugged() then
-
     CoreGui:SetCore("SendNotification", {
-
         Title = "TX退休脚本V2",
-
         Text = "检测到非法操作，脚本已终止",
-
         Duration = 7
-
     })
-
     return
-
 end
 
 if a == "shdhudgwu" or a == "1" or a == "3" or a == "4" or
-
    a == "5" or a == "6" or a == "7" or a == "8" or a == "9" or a == "10" or a == "11" or a == "12" or a == "13" or a == "14" or a == "15" or a == "16" then
-
     _G.ggg = true
-
 end
 
 if _G.ggg == true then
-
     CoreGui:SetCore("SendNotification", {
-
         Title = "TX退休脚本V2",
-
         Text = "尊贵的白名单用户，正在加载脚本...",
-
         Duration = 7
-
     })
 
     local urls = {
-
         "https://pastebin.com/raw/8YjURmMP",
-
         "https://pastefy.app/7NRuXg98/raw"
-
     }
 
     for _, url in ipairs(urls) do
-
         local obfuscatedUrl = obfuscateUrl(url)
-
         local deobfuscatedUrl = deobfuscateUrl(obfuscatedUrl)
-
         local success, content = pcall(originalHttpGet, game, deobfuscatedUrl)
 
-        if success and validateContent(content) then
-
+        if success then
             local func, err = originalLoadstring(content)
-
             if func then
-
                 func()
-
             else
-
                 CoreGui:SetCore("SendNotification", {
-
                     Title = "TX退休脚本V2",
-
                     Text = "脚本加载失败: " .. tostring(err),
-
                     Duration = 7
-
                 })
-
             end
-
         else
-
             CoreGui:SetCore("SendNotification", {
-
                 Title = "TX退休脚本V2",
-
-                Text = "脚本内容验证失败或网络错误",
-
+                Text = "网络错误",
                 Duration = 7
-
             })
-
         end
-
     end
-
 else
-
     CoreGui:SetCore("SendNotification", {
-
         Title = "TX退休脚本V2",
-
         Text = "你没有白名单，请找代理购买",
-
         Duration = 7
-
     })
-
     CoreGui:SetCore("SendNotification", {
-
         Title = "TX退休脚本V2",
-
         Text = "已自动为您复制群号",
-
         Duration = 7
-
     })
-
     setclipboard("160369111")
-
 end
