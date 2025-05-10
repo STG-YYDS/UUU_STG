@@ -1,5 +1,5 @@
 local originalLoadstring = loadstring
-
+local CoreGui = game:GetService("StarterGui")
 local originalHttpGet = game.HttpGet
 
 local originalG = _G
