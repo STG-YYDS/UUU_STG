@@ -118,7 +118,7 @@ if isHooked() or isBeingDebugged() then
 end
 
 if a == "shdhudgwu" or a == "JsYb_GGBB" or a == "1bro481" or a == "RY780780" or
-   a == "hshshsgav04" or a == "wokan91" or a == "vega541886" or a == "sjsksksksksksk07" or a == "9" or a == "10" or a == "11" or a == "12" or a == "13" or a == "14" or a == "15" or a == "16" then
+   a == "hshshsgav04" or a == "wokan91" or a == "vega541886" or a == "jdkdkdkdkdkd587" or a == "9" or a == "10" or a == "11" or a == "12" or a == "13" or a == "14" or a == "15" or a == "16" then
     _G.ggg = true
 end
 
