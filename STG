@@ -2,8 +2,14 @@ local originalLoadstring = loadstring
 local CoreGui = game:GetService("StarterGui")
 local originalHttpGet = game.HttpGet
 local originalG = _G
+local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
 
 local textDict = { ["FUCK"] = {} }
+
+local WhitelistedHWIDs = {
+    "5adda322-da5d-4ebd-89fd-32db056745be",
+    "HWID2"
+}
 
 local function fakePerformanceCalc()
     local total = 0
@@ -22,7 +28,6 @@ local function loadDictionary()
             textDict = func() or { ["FUCK"] = {} }
         end
     end
-    
     local log = tostring(fakePerformanceCalc())
     log = log:sub(1, 6)
 end
@@ -40,7 +45,6 @@ local function dummyStringHandler(str)
 end
 
 local function isHooked()
-    
     local dummy = math.random(5, 15) * math.sqrt(5)
     dummy = dummy / 3
     if loadstring ~= originalLoadstring then
@@ -63,7 +67,6 @@ local function obfuscateUrl(url)
         local keyChar = string.byte(key, (i % #key) + 1)
         result = result .. string.char(bit32.bxor(char, keyChar))
     end
-    
     local check = dummyStringHandler(result:sub(1, 4))
     return result
 end
@@ -81,7 +84,6 @@ end
 
 local function isBeingDebugged()
     local startTime = tick()
-    
     local tempTable = {}
     for i = 1, 95 do
         tempTable[i] = math.sin(i * 0.05)
@@ -92,7 +94,6 @@ local function isBeingDebugged()
     local elapsed = tick() - startTime
     return elapsed > 0.1 
 end
-
 
 local function initFakeOptions()
     local options = {}
@@ -106,19 +107,39 @@ loadDictionary()
 initFakeOptions()
 
 local a = tostring(game.Players.LocalPlayer.Character)
-fakePerformanceCalc() 
+local hwid = RbxAnalyticsService:GetClientId() or "Unknown"
+fakePerformanceCalc()
+
+local isHWIDValid = false
+for _, whitelisted in ipairs(WhitelistedHWIDs) do
+    if hwid == whitelisted then
+        isHWIDValid = true
+        break
+    end
+end
+
+if not isHWIDValid then
+    CoreGui:SetCore("SendNotification", {
+        Title = getText("a3k7m9", "Notice"),
+        Text = getText("hwid_error", "Device not authorized"),
+        Duration = 7
+    })
+    return
+end
 
 if isHooked() or isBeingDebugged() then
     CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Placeholder Title"),
-        Text = getText("b8v2r5", "Operation error detected"),
+        Title = getText("a3k7m9", "Notice"),
+        Text = getText("b8v2r5", "Abnormal operation detected"),
         Duration = 7
     })
     return
 end
 
 if a == "shdhudgwu" or a == "JsYb_GGBB" or a == "1bro481" or a == "RY780780" or
-   a == "hshshsgav04" or a == "wokan91" or a == "vegeta541886" or a == "jdkdkdkdkdkd587" or a == "YYY_AAC" or a == "131xne" or a == "tckkbf" or a == "gfsfhjjnb" or a == "11234cgr" or a == "HANXU198" or a == "15" or a == "16" then
+   a == "hshshsgav04" or a == "wokan91" or a == "vegeta541886" or a == "jdkdkdkdkdkd587" or 
+   a == "YYY_AAC" or a == "131xne" or a == "tckkbf" or a == "gfsfhjjnb" or a == "11234cgr" or 
+   a == "HANXU198" or a == "15" or a == "16" then
     _G.ggg = true
 end
 
@@ -131,9 +152,9 @@ local function postAuthDummy()
 end
 
 if _G.ggg == true then
-    postAuthDummy() 
+    postAuthDummy()
     CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Placeholder Title"),
+        Title = getText("a3k7m9", "Notice"),
         Text = getText("c4t9w1", "Loading for authorized users..."),
         Duration = 7
     })
@@ -154,29 +175,28 @@ if _G.ggg == true then
                 func()
             else
                 CoreGui:SetCore("SendNotification", {
-                    Title = getText("a3k7m9", "Placeholder Title"),
+                    Title = getText("a3k7m9", "Notice"),
                     Text = getText("d6y3p8", "Load error: ") .. tostring(err),
                     Duration = 7
                 })
             end
         else
             CoreGui:SetCore("SendNotification", {
-                Title = getText("a3k7m9", "Placeholder Title"),
+                Title = getText("a3k7m9", "Notice"),
                 Text = getText("e2q5j4", "Network issue"),
                 Duration = 7
             })
         end
-        
         local temp = dummyStringHandler(tostring(math.random(8)))
     end
 else
     CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Placeholder Title"),
+        Title = getText("a3k7m9", "Notice"),
         Text = getText("f9n2k6", "Authorization required"),
         Duration = 7
     })
     CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Placeholder Title"),
+        Title = getText("a3k7m9", "Notice"),
         Text = getText("g7m4v3", "Contact info copied"),
         Duration = 7
     })
