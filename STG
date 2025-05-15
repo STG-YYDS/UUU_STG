@@ -7,6 +7,7 @@ local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
 local textDict = { ["FUCK"] = {} }
 
 local WhitelistedHWIDs = {
+    "0a5c8b17-8f24-4070-abbd-9bde5954043e",
     "5adda322-da5d-4ebd-89fd-32db056745be",
     "f9733b4f-621b-4677-b680-093ef6764336"
 }
