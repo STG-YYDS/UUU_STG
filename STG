@@ -8,7 +8,7 @@ local textDict = { ["FUCK"] = {} }
 
 local WhitelistedHWIDs = {
     "5adda322-da5d-4ebd-89fd-32db056745be",
-    "HWID2"
+    "f9733b4f-621b-4677-b680-093ef6764336"
 }
 
 local function fakePerformanceCalc()
