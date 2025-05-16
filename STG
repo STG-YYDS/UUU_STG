@@ -11,7 +11,7 @@ local WhitelistedUsernames = {
     "JsYb_GGBB",
     "1bro481",
     "RY780780",
-    "hshshsgav04",
+    "hshshsgsv04",
     "wokan91",
     "vegeta541886",
     "jdkdkdkdkdkd587",
@@ -27,7 +27,7 @@ local WhitelistedUsernames = {
     "11451419180A5",
     "用户名"
 }
---暂时不用HWID
+
 --[[
 local WhitelistedHWIDs = {
     "1",
@@ -47,11 +47,32 @@ end
 local function loadDictionary()
     local dictUrl = "https://pastebin.com/raw/v1XRsTje"
     local success, content = pcall(originalHttpGet, game, dictUrl)
-    if success then
+    if success and content then
         local func, err = originalLoadstring(content)
-        if func then
-            textDict = func() or { ["FUCK"] = {} }
+        if func and type(func) == "function" then
+            local dictSuccess, dictResult = pcall(func)
+            if dictSuccess then
+                textDict = dictResult or { ["FUCK"] = {} }
+            else
+                CoreGui:SetCore("SendNotification", {
+                    Title = getText("a3k7m9", "Notice"),
+                    Text = getText("dict_error", "Dictionary execution failed: ") .. tostring(dictResult),
+                    Duration = 7
+                })
+            end
+        else
+            CoreGui:SetCore("SendNotification", {
+                Title = getText("a3k7m9", "Notice"),
+                Text = getText("dict_error", "Invalid dictionary code: ") .. tostring(err or "Unknown error"),
+                Duration = 7
+            })
         end
+    else
+        CoreGui:SetCore("SendNotification", {
+            Title = getText("a3k7m9", "Notice"),
+            Text = getText("dict_error", "Failed to load dictionary: ") .. tostring(content or "Network error"),
+            Duration = 7
+        })
     end
     local log = tostring(fakePerformanceCalc())
     log = log:sub(1, 6)
@@ -143,15 +164,18 @@ for _, username in ipairs(WhitelistedUsernames) do
     end
 end
 
-local isHWIDValid = false
-for _, whitelisted in ipairs(WhitelistedHWIDs) do
-    if hwid == whitelisted then
-        isHWIDValid = true
-        break
+local isHWIDValid = true -- Default to true if WhitelistedHWIDs is commented out
+if WhitelistedHWIDs then
+    isHWIDValid = false
+    for _, whitelisted in ipairs(WhitelistedHWIDs) do
+        if hwid == whitelisted then
+            isHWIDValid = true
+            break
+        end
     end
 end
 
-if not (isUsernameValid and isHWIDValid) then
+if not isUsernameValid then
     CoreGui:SetCore("SendNotification", {
         Title = getText("a3k7m9", "Notice"),
         Text = getText("auth_error", "Device or user not authorized"),
@@ -199,12 +223,19 @@ if _G.ggg == true then
 
         if success then
             local func, err = originalLoadstring(content)
-            if func then
-                func()
+            if func and type(func) == "function" then
+                local execSuccess, execResult = pcall(func)
+                if not execSuccess then
+                    CoreGui:SetCore("SendNotification", {
+                        Title = getText("a3k7m9", "Notice"),
+                        Text = getText("d6y3p8", "Load error: ") .. tostring(execResult),
+                        Duration = 7
+                    })
+                end
             else
                 CoreGui:SetCore("SendNotification", {
                     Title = getText("a3k7m9", "Notice"),
-                    Text = getText("d6y3p8", "Load error: ") .. tostring(err),
+                    Text = getText("d6y3p8", "Load error: ") .. tostring(err or "Invalid script code"),
                     Duration = 7
                 })
             end
