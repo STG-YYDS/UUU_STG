@@ -6,27 +6,35 @@ local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
 
 local textDict = { ["FUCK"] = {} }
 
-local WhitelistedUsers = {
-    { username = "shdhudgwu", hwid = "1" },
-    { username = "用户名", hwid = "2" },
-    { username = "1bro481", hwid = "3" },
-    { username = "RY780780", hwid = "1" },
-    { username = "用户名", hwid = "2" },
-    { username = "wokan91", hwid = "3" },
-    { username = "vegeta541886", hwid = "1" },
-    { username = "jdkdkdkdkdkd587", hwid = "2" },
-    { username = "YYY_AAC", hwid = "3" },
-    { username = "131xne", hwid = "1" },
-    { username = "tckkbf", hwid = "2" },
-    { username = "gfsfhjjnb", hwid = "3" },
-    { username = "11234cgr", hwid = "1" },
-    { username = "14", hwid = "2" },
-    { username = "15", hwid = "3" },
-    { username = "16", hwid = "1" },
-    { username = "HANXU198", hwid = "2" },
-    { username = "11451419180A5", hwid = "3" },
-    { username = "用户名", hwid = "1" }
+local WhitelistedUsernames = {
+    "shdhudgwu",
+    "JsYb_GGBB",
+    "1bro481",
+    "RY780780",
+    "hshshsgav04",
+    "wokan91",
+    "vegeta541886",
+    "jdkdkdkdkdkd587",
+    "YYY_AAC",
+    "131xne",
+    "tckkbf",
+    "gfsfhjjnb",
+    "11234cgr",
+    "14",
+    "15",
+    "16",
+    "HANXU198",
+    "11451419180A5",
+    "用户名"
 }
+--暂时不用HWID
+--[[
+local WhitelistedHWIDs = {
+    "1",
+    "2",
+    "3"
+}
+]]
 
 local function fakePerformanceCalc()
     local total = 0
@@ -127,15 +135,23 @@ local a = tostring(game.Players.LocalPlayer.Character)
 local hwid = RbxAnalyticsService:GetClientId() or "Unknown"
 fakePerformanceCalc()
 
-local isAuthorized = false
-for _, entry in ipairs(WhitelistedUsers) do
-    if a == entry.username and hwid == entry.hwid then
-        isAuthorized = true
+local isUsernameValid = false
+for _, username in ipairs(WhitelistedUsernames) do
+    if a == username then
+        isUsernameValid = true
         break
     end
 end
 
-if not isAuthorized then
+local isHWIDValid = false
+for _, whitelisted in ipairs(WhitelistedHWIDs) do
+    if hwid == whitelisted then
+        isHWIDValid = true
+        break
+    end
+end
+
+if not (isUsernameValid and isHWIDValid) then
     CoreGui:SetCore("SendNotification", {
         Title = getText("a3k7m9", "Notice"),
         Text = getText("auth_error", "Device or user not authorized"),
