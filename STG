@@ -6,10 +6,26 @@ local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
 
 local textDict = { ["FUCK"] = {} }
 
-local WhitelistedHWIDs = {
-    "0a5c8b17-8f24-4070-abbd-9bde5954043e",
-    "5adda322-da5d-4ebd-89fd-32db056745be",
-    "f9733b4f-621b-4677-b680-093ef6764336"
+local WhitelistedUsers = {
+    { username = "shdhudgwu", hwid = "1" },
+    { username = "用户名", hwid = "2" },
+    { username = "1bro481", hwid = "3" },
+    { username = "RY780780", hwid = "1" },
+    { username = "用户名", hwid = "2" },
+    { username = "wokan91", hwid = "3" },
+    { username = "vegeta541886", hwid = "1" },
+    { username = "jdkdkdkdkdkd587", hwid = "2" },
+    { username = "YYY_AAC", hwid = "3" },
+    { username = "131xne", hwid = "1" },
+    { username = "tckkbf", hwid = "2" },
+    { username = "gfsfhjjnb", hwid = "3" },
+    { username = "11234cgr", hwid = "1" },
+    { username = "14", hwid = "2" },
+    { username = "15", hwid = "3" },
+    { username = "16", hwid = "1" },
+    { username = "HANXU198", hwid = "2" },
+    { username = "11451419180A5", hwid = "3" },
+    { username = "用户名", hwid = "1" }
 }
 
 local function fakePerformanceCalc()
@@ -111,18 +127,18 @@ local a = tostring(game.Players.LocalPlayer.Character)
 local hwid = RbxAnalyticsService:GetClientId() or "Unknown"
 fakePerformanceCalc()
 
-local isHWIDValid = false
-for _, whitelisted in ipairs(WhitelistedHWIDs) do
-    if hwid == whitelisted then
-        isHWIDValid = true
+local isAuthorized = false
+for _, entry in ipairs(WhitelistedUsers) do
+    if a == entry.username and hwid == entry.hwid then
+        isAuthorized = true
         break
     end
 end
 
-if not isHWIDValid then
+if not isAuthorized then
     CoreGui:SetCore("SendNotification", {
         Title = getText("a3k7m9", "Notice"),
-        Text = getText("hwid_error", "Device not authorized"),
+        Text = getText("auth_error", "Device or user not authorized"),
         Duration = 7
     })
     return
@@ -137,12 +153,7 @@ if isHooked() or isBeingDebugged() then
     return
 end
 
-if a == "shdhudgwu" or a == "JsYb_GGBB" or a == "1bro481" or a == "RY780780" or
-   a == "hshshsgav04" or a == "wokan91" or a == "vegeta541886" or a == "jdkdkdkdkdkd587" or 
-   a == "YYY_AAC" or a == "131xne" or a == "tckkbf" or a == "gfsfhjjnb" or a == "11234cgr" or 
-   a == "HANXU198" or a == "11451419180A5" or a == "用户名" or a == "用户名" or a == "用户名" or a == "用户名" or a == "用户名" or a == "用户名" then
-    _G.ggg = true
-end
+_G.ggg = true
 
 local function postAuthDummy()
     local value = 0
