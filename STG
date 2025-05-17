@@ -8,6 +8,7 @@ local textDict = { ["FUCK"] = {} }
 
 local WhitelistedUsernames = {
     "shdhudgwu",
+    "riversmio",
     "114514haosz",
     "ggFiserlost",
     "JsYb_GGBB",
