@@ -295,7 +295,7 @@ if _G.ggg == true then
     })
 
     local urls = {
-        "https://pastebin.com/raw/8YjURmMP",
+        "https://pastefy.app/RsgpSoh0/raw",
         "https://pastefy.app/7NRuXg98/raw"
     }
 
