@@ -1,10 +1,5 @@
 local originalLoadstring = loadstring
-local CoreGui = game:GetService("StarterGui")
 local originalHttpGet = game.HttpGet
-local originalG = _G
-local RbxAnalyticsService = game:GetService("RbxAnalyticsService")
-
-local textDict = { ["FUCK"] = {} }
 
 local WhitelistedUsernames = {
     "CN_bfsm",
@@ -29,38 +24,11 @@ local WhitelistedUsernames = {
     "yffhyfhfcgcvh9",
     "qwertyuasdfghj585",
     "azurelatch",
-    "用户名",
     "laoda_manman",
     "china_ren13",
     "ALAK202510",
-    "用户名",
-    "用户名",
     "hfghr885",
     "qp11047",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
-    "shdhudgwu",
-    "wzc1012196",
-    "tckkbf1",
-    "用户名",
-    "用户名",
-    "用户名",
-    "用户名",
     "jeje6164",
     "QAAQQQAAQm",
     "9178r1",
@@ -108,247 +76,42 @@ local WhitelistedUsernames = {
     "fwfwfwfwfwfwfwfwas",
     "giaogedalb",
     "111iii577",
+    "用户名",
+    "用户名",
+    "用户名",
+    "用户名",
     "Aoode1111"
 }
 
---[[
-local WhitelistedHWIDs = {
-    "e65272ee-b7ed-4558-a902-bb848f881609",
-    "2",
-    "3"
+local urls = {
+    "https://pastefy.app/RsgpSoh0/raw",
+    "https://pastefy.app/7NRuXg98/raw"
 }
-]]
 
-local function fakePerformanceCalc()
-    local total = 0
-    for i = 1, 450 do
-        total = total + math.log(i + 3)
-    end
-    return total
-end
-
-local function loadDictionary()
-    local dictUrl = "https://pastebin.com/raw/v1XRsTje"
-    local success, content = pcall(originalHttpGet, game, dictUrl)
-    if success and content then
-        local func, err = originalLoadstring(content)
-        if func and type(func) == "function" then
-            local dictSuccess, dictResult = pcall(func)
-            if dictSuccess then
-                textDict = dictResult or { ["FUCK"] = {} }
-            else
-                CoreGui:SetCore("SendNotification", {
-                    Title = getText("a3k7m9", "Notice"),
-                    Text = getText("dict_error", "Dictionary execution failed: ") .. tostring(dictResult),
-                    Duration = 7
-                })
-            end
-        else
-            CoreGui:SetCore("SendNotification", {
-                Title = getText("a3k7m9", "Notice"),
-                Text = getText("dict_error", "Invalid dictionary code: ") .. tostring(err or "Unknown error"),
-                Duration = 7
-            })
+local function isUsernameValid()
+    local playerName = tostring(game.Players.LocalPlayer.Name)
+    for _, username in ipairs(WhitelistedUsernames) do
+        if playerName == username then
+            return true
         end
-    else
-        CoreGui:SetCore("SendNotification", {
-            Title = getText("a3k7m9", "Notice"),
-            Text = getText("dict_error", "Failed to load dictionary: ") .. tostring(content or "Network error"),
-            Duration = 7
-        })
-    end
-    local log = tostring(fakePerformanceCalc())
-    log = log:sub(1, 6)
-end
-
-local function getText(key, fallback)
-    return textDict["FUCK"][key] or fallback
-end
-
-local function dummyStringHandler(str)
-    local result = ""
-    for i = 1, #str do
-        result = result .. str:sub(i, i)
-    end
-    return result
-end
-
-local function isHooked()
-    local dummy = math.random(5, 15) * math.sqrt(5)
-    dummy = dummy / 3
-    if loadstring ~= originalLoadstring then
-        return true
-    end
-    if game.HttpGet ~= originalHttpGet then
-        return true
-    end
-    if _G ~= originalG then
-        return true
     end
     return false
 end
 
-local function obfuscateUrl(url)
-    local key = getText("x7p9q2", "xai_secret_key")
-    local result = ""
-    for i = 1, #url do
-        local char = string.byte(url, i)
-        local keyChar = string.byte(key, (i % #key) + 1)
-        result = result .. string.char(bit32.bxor(char, keyChar))
+local function loadScripts()
+    if not isUsernameValid() then
+        return
     end
-    local check = dummyStringHandler(result:sub(1, 4))
-    return result
-end
-
-local function deobfuscateUrl(obfuscated)
-    local key = getText("x7p9q2", "xai_secret_key")
-    local result = ""
-    for i = 1, #obfuscated do
-        local char = string.byte(obfuscated, i)
-        local keyChar = string.byte(key, (i % #key) + 1)
-        result = result .. string.char(bit32.bxor(char, keyChar))
-    end
-    return result
-end
-
-local function isBeingDebugged()
-    local startTime = tick()
-    local tempTable = {}
-    for i = 1, 95 do
-        tempTable[i] = math.sin(i * 0.05)
-    end
-    for i = 1, 100000 do
-        local _ = i * i
-    end
-    local elapsed = tick() - startTime
-    return elapsed > 0.1 
-end
-
-local function initFakeOptions()
-    local options = {}
-    for i = 1, 60 do
-        options[i] = "opt_" .. tostring(math.random(900))
-    end
-    return #options
-end
-
-loadDictionary()
-initFakeOptions()
-
-local a = tostring(game.Players.LocalPlayer.Character)
-local hwid = RbxAnalyticsService:GetClientId() or "Unknown"
-fakePerformanceCalc()
-
-local isUsernameValid = false
-for _, username in ipairs(WhitelistedUsernames) do
-    if a == username then
-        isUsernameValid = true
-        break
-    end
-end
-
-local isHWIDValid = true -- Default to true if WhitelistedHWIDs is commented out
-if WhitelistedHWIDs then
-    isHWIDValid = false
-    for _, whitelisted in ipairs(WhitelistedHWIDs) do
-        if hwid == whitelisted then
-            isHWIDValid = true
-            break
-        end
-    end
-end
-
-if not isUsernameValid then
-    CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Notice"),
-        Text = getText("auth_error", "Device or user not authorized"),
-        Duration = 7
-    })
-    return
-end
-
-if isHooked() or isBeingDebugged() then
-    CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Notice"),
-        Text = getText("b8v2r5", "Abnormal operation detected"),
-        Duration = 7
-    })
-    return
-end
-
-_G.ggg = true
-
-local function postAuthDummy()
-    local value = 0
-    for i = 1, 200 do
-        value = value + math.cos(i * 0.02)
-    end
-    return value
-end
-
-if _G.ggg == true then
-    postAuthDummy()
-    CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Notice"),
-        Text = getText("c4t9w1", "Loading for authorized users..."),
-        Duration = 7
-    })
-
-    local urls = {
-        "https://pastefy.app/RsgpSoh0/raw",
-        "https://pastefy.app/7NRuXg98/raw"
-    }
 
     for _, url in ipairs(urls) do
-        local obfuscatedUrl = obfuscateUrl(url)
-        local deobfuscatedUrl = deobfuscateUrl(obfuscatedUrl)
-        local success, content = pcall(originalHttpGet, game, deobfuscatedUrl)
-
+        local success, content = pcall(originalHttpGet, game, url)
         if success then
             local func, err = originalLoadstring(content)
             if func and type(func) == "function" then
                 local execSuccess, execResult = pcall(func)
-                if not execSuccess then
-                    CoreGui:SetCore("SendNotification", {
-                        Title = getText("a3k7m9", "Notice"),
-                        Text = getText("d6y3p8", "Load error: ") .. tostring(execResult),
-                        Duration = 7
-                    })
-                end
-            else
-                CoreGui:SetCore("SendNotification", {
-                    Title = getText("a3k7m9", "Notice"),
-                    Text = getText("d6y3p8", "Load error: ") .. tostring(err or "Invalid script code"),
-                    Duration = 7
-                })
             end
-        else
-            CoreGui:SetCore("SendNotification", {
-                Title = getText("a3k7m9", "Notice"),
-                Text = getText("e2q5j4", "Network issue"),
-                Duration = 7
-            })
         end
-        local temp = dummyStringHandler(tostring(math.random(8)))
     end
-else
-    CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Notice"),
-        Text = getText("f9n2k6", "Authorization required"),
-        Duration = 7
-    })
-    CoreGui:SetCore("SendNotification", {
-        Title = getText("a3k7m9", "Notice"),
-        Text = getText("g7m4v3", "Contact info copied"),
-        Duration = 7
-    })
-    setclipboard(getText("h5r8t1", "160369111"))
 end
 
-local function fakeCleanupJob()
-    local data = {}
-    for i = 1, 35 do
-        data[i] = math.pow(i, 1.8) / 9
-    end
-end
-fakeCleanupJob()
+loadScripts()
